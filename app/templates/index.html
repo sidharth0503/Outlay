@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Outlay - Finance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#d6a9ff",
+                        "tertiary-fixed": "#d8e2ff",
+                        "on-surface-variant": "#bccbb9",
+                        "on-primary-container": "#004b1e",
+                        "inverse-primary": "#006e2f",
+                        "on-primary": "#003915",
+                        "surface-tint": "#4ae176",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed": "#2c0051",
+                        "secondary-container": "#6f00be",
+                        "outline-variant": "#3d4a3d",
+                        "inverse-on-surface": "#283044",
+                        "background": "#0b1326",
+                        "secondary-fixed": "#f0dbff",
+                        "outline": "#869585",
+                        "surface": "#0b1326",
+                        "secondary-fixed-dim": "#ddb7ff",
+                        "on-secondary-fixed-variant": "#6900b3",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface-container-highest": "#2d3449",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-secondary": "#490080",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "secondary": "#ddb7ff",
+                        "tertiary": "#afc7ff",
+                        "surface-container-high": "#222a3d",
+                        "on-tertiary-fixed": "#001a42",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#dae2fd",
+                        "on-surface": "#dae2fd",
+                        "surface-dim": "#0b1326",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-primary-fixed": "#002109",
+                        "surface-container-lowest": "#060e20",
+                        "primary": "#4be277",
+                        "surface-container-low": "#131b2e",
+                        "primary-container": "#22c55e",
+                        "on-tertiary-container": "#003d88",
+                        "tertiary-container": "#82abff",
+                        "surface-bright": "#31394d",
+                        "surface-variant": "#2d3449",
+                        "primary-fixed": "#6bff8f",
+                        "on-primary-fixed-variant": "#005321",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dae2fd",
+                        "on-tertiary": "#002e6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "1.5rem",
+                        "margin": "2rem",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "gutter": "1.5rem",
+                        "xl": "3rem",
+                        "unit": "4px",
+                        "xs": "0.5rem"
+                    },
+                    "fontFamily": {
+                        "headline-md": [
+                            "Inter"
+                        ],
+                        "label-md": [
+                            "Inter"
+                        ],
+                        "headline-lg": [
+                            "Inter"
+                        ],
+                        "body-lg": [
+                            "Inter"
+                        ],
+                        "label-sm": [
+                            "Inter"
+                        ],
+                        "headline-xl": [
+                            "Inter"
+                        ],
+                        "body-md": [
+                            "Inter"
+                        ]
+                    },
+                    "fontSize": {
+                        "headline-md": [
+                            "24px",
+                            {
+                                "lineHeight": "1.3",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "label-md": [
+                            "14px",
+                            {
+                                "lineHeight": "1.4",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "body-lg": [
+                            "18px",
+                            {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "label-sm": [
+                            "12px",
+                            {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "headline-xl": [
+                            "48px",
+                            {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "body-md": [
+                            "16px",
+                            {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .mesh-gradient {
+            background-color: #0b1326;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-input:focus {
+            border-color: #4be277;
+            box-shadow: inset 0 0 10px rgba(75, 226, 119, 0.2);
+            outline: none;
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(75, 226, 119, 0.5);
+        }
+    </style>
+</head>
+
+<body class="mesh-gradient min-h-screen text-on-surface font-body-md overflow-x-hidden">
+    <!-- Top Navigation -->
+    <nav
+        class="fixed top-0 w-full z-50 bg-white/10 backdrop-blur-2xl border-b border-white/20 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-lg">
+            <span class="text-white font-headline-lg uppercase tracking-widest font-black">Outlay</span>
+        </div>
+        <div class="flex items-center gap-md">
+            <button id="btn-add-expense"
+                class="bg-primary hover:bg-primary-fixed text-on-primary font-label-md px-6 py-2 rounded-lg neon-glow transition-all duration-300 active:scale-95">
+                Add Expense
+            </button>
+            <button
+                class="text-white/60 hover:text-white transition-colors hover:bg-white/5 p-2 rounded-full duration-300">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button
+                class="text-white/60 hover:text-white transition-colors hover:bg-white/5 p-2 rounded-full duration-300">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-white/20 border border-white/30 overflow-hidden">
+                <img alt="User Profile" class="w-full h-full object-cover"
+                    data-alt="A close-up portrait of a professional in a modern, dark-themed office setting with subtle purple and blue neon lighting reflecting in the background. The mood is focused and sophisticated, matching a high-end financial dashboard aesthetic."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOEe999gmhT9NijwrP5AcugdV2B4KIj_fHZ-flPvdmuk1ZLtQmToDLFudGIkVjFuG0xPpEusVwxJgWfJYCg-lqS-HmPVLfA3xqJTI75X-3_OX4dDAEPzlwOPjuWV6IWNWrveYCAhyQjjmtQbeH_5iP0kCQCRxidO8S0LPdqL4mWGSu2vUr5kX3zfiAF_ac-2B8-XAgdXvx4UkxLm6BdG20FOpJ2tgnI9OPqE7PwUgMkwM1E9J36jk7fcE1CENtbHhXHyQoxSlsSTaf" />
+            </div>
+        </div>
+    </nav>
+    <!-- Side Navigation & Main Content Wrapper -->
+    <div class="flex pt-[80px] min-h-screen">
+        <!-- Side Navigation -->
+        <aside
+            class="hidden md:flex flex-col h-[calc(100vh-80px)] w-64 border-r border-white/20 bg-white/5 backdrop-blur-lg fixed left-0 p-4 gap-4 z-40 divide-y divide-white/10 shadow-2xl">
+            <nav class="flex-1 py-4 flex flex-col gap-2">
+                <a class="bg-primary text-on-primary rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.5)] flex items-center gap-sm p-3 font-label-md cursor-pointer hover:translate-x-1 duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    Overview
+                </a>
+                <a class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg flex items-center gap-sm p-3 font-label-md transition-all cursor-pointer hover:translate-x-1 duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    Budgets
+                </a>
+                <a class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg flex items-center gap-sm p-3 font-label-md transition-all cursor-pointer hover:translate-x-1 duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    Transactions
+                </a>
+                <a class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg flex items-center gap-sm p-3 font-label-md transition-all cursor-pointer hover:translate-x-1 duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">event_repeat</span>
+                    Bills
+                </a>
+                <a class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg flex items-center gap-sm p-3 font-label-md transition-all cursor-pointer hover:translate-x-1 duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    Insights
+                </a>
+            </nav>
+            <div class="py-4 flex flex-col gap-2">
+                <a class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg flex items-center gap-sm p-3 font-label-md transition-all cursor-pointer hover:translate-x-1 duration-200 mt-2"
+                    href="#">
+                    <span class="material-symbols-outlined">help</span>
+                    Help
+                </a>
+                <a class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg flex items-center gap-sm p-3 font-label-md transition-all cursor-pointer hover:translate-x-1 duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </a>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 md:ml-64 p-lg lg:p-xl flex flex-col gap-xl">
+            <!-- Hero Metrics -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+                <div class="glass-card rounded-xl p-lg flex flex-col gap-sm shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                    <span class="text-white/60 font-label-md uppercase tracking-wider">Total Monthly Spend</span>
+                    <h2 id="stat-total-spend" class="text-primary font-headline-xl neon-glow text-shadow-sm">—</h2>
+                    <div class="flex items-center gap-xs text-primary font-label-sm mt-2">
+                        <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                        <span>Live from API</span>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-lg flex flex-col gap-sm shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                    <span class="text-white/60 font-label-md uppercase tracking-wider">Unpaid Balance</span>
+                    <h2 id="stat-unpaid" class="text-tertiary font-headline-xl">—</h2>
+                    <div class="flex items-center gap-xs text-tertiary font-label-sm mt-2">
+                        <span class="material-symbols-outlined text-[16px]">info</span>
+                        <span>Pending bills</span>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-lg flex flex-col gap-sm shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                    <span class="text-white/60 font-label-md uppercase tracking-wider">Active Bills</span>
+                    <h2 id="stat-active-bills" class="text-white font-headline-xl">—</h2>
+                    <div class="flex items-center gap-xs text-white/60 font-label-sm mt-2">
+                        <span class="material-symbols-outlined text-[16px]">pending_actions</span>
+                        <span id="stat-pending-count">— pending</span>
+                    </div>
+                </div>
+            </section>
+            <!-- 3-Column Grid -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+                <!-- Active Budgets -->
+                <div
+                    class="glass-card rounded-xl p-lg flex flex-col gap-md shadow-[0_20px_40px_rgba(0,0,0,0.4)] col-span-1">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-sm">
+                        <h3 class="text-white font-headline-md">Active Budgets</h3>
+                        <button class="text-white/60 hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">more_horiz</span>
+                        </button>
+                    </div>
+                    <div id="budgets-container" class="flex flex-col gap-md mt-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <!-- Upcoming Bills -->
+                <div
+                    class="glass-card rounded-xl p-lg flex flex-col gap-md shadow-[0_20px_40px_rgba(0,0,0,0.4)] col-span-1 lg:col-span-1">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-sm">
+                        <h3 class="text-white font-headline-md">Upcoming Bills</h3>
+                        <button class="text-white/60 hover:text-primary transition-colors text-label-md">
+                            View All
+                        </button>
+                    </div>
+                    <div id="bills-container" class="flex flex-col gap-sm mt-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <!-- Recent Transactions -->
+                <div
+                    class="glass-card rounded-xl p-lg flex flex-col gap-md shadow-[0_20px_40px_rgba(0,0,0,0.4)] col-span-1">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-sm">
+                        <h3 class="text-white font-headline-md">Recent Transactions</h3>
+                    </div>
+                    <div class="flex flex-col gap-sm mt-sm">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <div class="flex items-center gap-sm">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary-fixed">
+                                    <span class="material-symbols-outlined">restaurant</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-white font-label-md">Whole Foods</span>
+                                    <span class="text-white/50 font-label-sm">Today, 2:45 PM</span>
+                                </div>
+                            </div>
+                            <span class="text-white font-headline-md text-[16px] text-right">-$142.50</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <div class="flex items-center gap-sm">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary-fixed">
+                                    <span class="material-symbols-outlined">directions_car</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-white font-label-md">Uber</span>
+                                    <span class="text-white/50 font-label-sm">Yesterday</span>
+                                </div>
+                            </div>
+                            <span class="text-white font-headline-md text-[16px] text-right">-$24.00</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div class="flex items-center gap-sm">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-fixed">
+                                    <span class="material-symbols-outlined">account_balance</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-white font-label-md">Salary Deposit</span>
+                                    <span class="text-white/50 font-label-sm">Oct 1</span>
+                                </div>
+                            </div>
+                            <span class="text-primary font-headline-md text-[16px] text-right">+$4,200.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Bottom Section -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-lg mb-xl">
+                <div class="glass-card rounded-xl p-lg flex items-center gap-md shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                    <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center neon-glow">
+                        <span class="material-symbols-outlined text-primary text-[32px]">lightbulb</span>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-headline-md text-[18px]">Smart Insight</h4>
+                        <p class="text-white/80 font-body-md mt-1">Great job! You spent 15% less on Dining this month.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="glass-card rounded-xl p-lg flex flex-col justify-center gap-sm shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                    <div class="flex justify-between items-end">
+                        <h4 class="text-white font-headline-md text-[18px]">Vacation Fund</h4>
+                        <span class="text-primary font-label-md">$1,200 / $2,000</span>
+                    </div>
+                    <div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden mt-2">
+                        <div
+                            class="h-full bg-gradient-to-r from-primary to-emerald-400 w-[60%] rounded-full relative neon-glow">
+                            <div class="absolute right-0 top-0 bottom-0 w-4 bg-white/50 blur-[2px]"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ===== Add Expense Modal ===== -->
+    <div id="expense-modal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+        <!-- Backdrop -->
+        <div id="modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <!-- Panel -->
+        <div class="glass-card rounded-xl p-lg w-full max-w-md relative z-10 mx-4 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
+            <div class="flex justify-between items-center border-b border-white/10 pb-sm mb-md">
+                <h3 class="text-white font-headline-md">New Expense</h3>
+                <button id="modal-close" class="text-white/60 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="expense-form" class="flex flex-col gap-md">
+                <div class="flex flex-col gap-xs">
+                    <label class="text-white/60 font-label-sm uppercase tracking-wider" for="exp-name">Name</label>
+                    <input id="exp-name"
+                        class="glass-input rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 font-body-md"
+                        type="text" placeholder="e.g. Netflix" required />
+                </div>
+                <div class="grid grid-cols-2 gap-md">
+                    <div class="flex flex-col gap-xs">
+                        <label class="text-white/60 font-label-sm uppercase tracking-wider" for="exp-amount">Amount
+                            ($)</label>
+                        <input id="exp-amount"
+                            class="glass-input rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 font-body-md"
+                            type="number" step="0.01" min="0" placeholder="0.00" required />
+                    </div>
+                    <div class="flex flex-col gap-xs">
+                        <label class="text-white/60 font-label-sm uppercase tracking-wider" for="exp-date">Due
+                            Date</label>
+                        <input id="exp-date"
+                            class="glass-input rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 font-body-md"
+                            type="date" required />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-xs">
+                    <label class="text-white/60 font-label-sm uppercase tracking-wider"
+                        for="exp-category">Category</label>
+                    <select id="exp-category"
+                        class="glass-input rounded-lg px-4 py-3 text-white bg-slate-800/50 font-body-md appearance-none"
+                        required>
+                        <option value="" disabled selected style="color: black;">Select category</option>
+                        <option value="Utilities" style="color: black;">Utilities</option>
+                        <option value="Entertainment" style="color: black;">Entertainment</option>
+                        <option value="Housing" style="color: black;">Housing</option>
+                        <option value="Food" style="color: black;">Food</option>
+                        <option value="Transport" style="color: black;">Transport</option>
+                        <option value="Health" style="color: black;">Health</option>
+                        <option value="Other" style="color: black;">Other</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="bg-primary hover:bg-primary-fixed text-on-primary font-label-md px-6 py-3 rounded-lg neon-glow transition-all duration-300 active:scale-95 mt-sm">
+                    Save Expense
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== Dashboard Script ===== -->
+    <script>
+            (function () {
+                'use strict';
+
+                // ── DOM references ────────────────────────────────────────────
+                const $totalSpend = document.getElementById('stat-total-spend');
+                const $unpaid = document.getElementById('stat-unpaid');
+                const $activeBills = document.getElementById('stat-active-bills');
+                const $pendingCount = document.getElementById('stat-pending-count');
+                const $billsBox = document.getElementById('bills-container');
+                const $budgetsBox = document.getElementById('budgets-container');
+                const $modal = document.getElementById('expense-modal');
+                const $form = document.getElementById('expense-form');
+                const $btnOpen = document.getElementById('btn-add-expense');
+                const $btnClose = document.getElementById('modal-close');
+                const $backdrop = document.getElementById('modal-backdrop');
+
+                // ── Helpers ───────────────────────────────────────────────────
+                const fmt = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const formatDate = (iso) => {
+                    const d = new Date(iso + 'T00:00:00');
+                    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                };
+
+                // ── Modal controls ────────────────────────────────────────────
+                function openModal() { $modal.classList.remove('hidden'); $modal.classList.add('flex'); }
+                function closeModal() { $modal.classList.add('hidden'); $modal.classList.remove('flex'); $form.reset(); }
+
+                $btnOpen.addEventListener('click', openModal);
+                $btnClose.addEventListener('click', closeModal);
+                $backdrop.addEventListener('click', closeModal);
+
+                // ── API helpers ───────────────────────────────────────────────
+                async function apiFetch(url, opts) {
+                    try {
+                        const res = await fetch(url, opts);
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            throw new Error(err.error || `HTTP ${res.status}`);
+                        }
+                        return await res.json();
+                    } catch (e) {
+                        console.error(`[Outlay] ${opts?.method || 'GET'} ${url} failed:`, e);
+                        throw e;
+                    }
+                }
+
+                // ── Render: Stats cards ───────────────────────────────────────
+                function renderStats(analytics) {
+                    $totalSpend.textContent = fmt(analytics.total_spend);
+                    $unpaid.textContent = fmt(analytics.unpaid_balance);
+                }
+
+                // ── Render: Bills list ────────────────────────────────────────
+                function renderBills(bills) {
+                    $activeBills.textContent = bills.length;
+                    const pendingN = bills.filter(b => b.status === 'pending').length;
+                    $pendingCount.textContent = `${pendingN} pending`;
+
+                    $billsBox.innerHTML = '';
+                    bills.forEach((bill, i) => {
+                        const isLast = i === bills.length - 1;
+                        const row = document.createElement('div');
+                        row.className = `flex justify-between items-center py-2${isLast ? '' : ' border-b border-white/5'}`;
+
+                        if (bill.status === 'paid') {
+                            row.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="text-white font-label-md">${bill.name}</span>
+                            <span class="text-white/50 font-label-sm">${formatDate(bill.dueDate)}</span>
+                        </div>
+                        <div class="flex items-center gap-sm">
+                            <span class="text-white font-headline-md text-[18px]">${fmt(bill.amount)}</span>
+                            <span class="px-2 py-1 rounded-full bg-primary-container/20 text-primary-fixed border border-primary-container/50 font-label-sm text-[10px]">Paid</span>
+                        </div>`;
+                        } else {
+                            row.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="text-white font-label-md">${bill.name}</span>
+                            <span class="text-white/50 font-label-sm">${formatDate(bill.dueDate)}</span>
+                        </div>
+                        <div class="flex items-center gap-sm">
+                            <span class="text-white font-headline-md text-[18px]">${fmt(bill.amount)}</span>
+                            <button data-bill-id="${bill.id}" class="btn-pay px-3 py-1 rounded-full border border-white/20 text-white hover:bg-white/10 font-label-sm transition-colors">Mark Paid</button>
+                        </div>`;
+                        }
+                        $billsBox.appendChild(row);
+                    });
+
+                    // Attach pay handlers
+                    $billsBox.querySelectorAll('.btn-pay').forEach(btn => {
+                        btn.addEventListener('click', () => markPaid(btn.dataset.billId));
+                    });
+                }
+
+                // ── Render: Budgets ───────────────────────────────────────────
+                function renderBudgets(variance) {
+                    $budgetsBox.innerHTML = '';
+                    for (const [cat, data] of Object.entries(variance)) {
+                        const pct = data.limit > 0 ? Math.min((data.current_spend / data.limit) * 100, 100) : 0;
+                        const isOver = data.remaining_budget <= 0;
+                        const barColor = isOver ? 'bg-error' : 'bg-gradient-to-r from-primary to-emerald-400';
+                        const block = document.createElement('div');
+                        block.className = 'flex flex-col gap-xs';
+                        block.innerHTML = `
+                    <div class="flex justify-between text-label-md text-white/80">
+                        <span>${cat}</span>
+                        <span>${fmt(data.current_spend)} / ${fmt(data.limit)}</span>
+                    </div>
+                    <div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full ${barColor} rounded-full relative transition-all duration-700" style="width:${pct}%">
+                            ${isOver ? '' : '<div class="absolute right-0 top-0 bottom-0 w-4 bg-white/50 blur-[2px]"></div>'}
+                        </div>
+                    </div>`;
+                        $budgetsBox.appendChild(block);
+                    }
+                }
+
+                // ── Action: Mark Paid ─────────────────────────────────────────
+                async function markPaid(billId) {
+                    try {
+                        await apiFetch(`/api/bills/${billId}/pay`, { method: 'PATCH' });
+                        await initDashboard();
+                    } catch (_) { /* logged inside apiFetch */ }
+                }
+
+                // ── Action: Add Expense ───────────────────────────────────────
+                $form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const payload = {
+                        name: document.getElementById('exp-name').value.trim(),
+                        amount: parseFloat(document.getElementById('exp-amount').value),
+                        dueDate: document.getElementById('exp-date').value,
+                        category: document.getElementById('exp-category').value,
+                    };
+                    try {
+                        await apiFetch('/api/bills', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                        });
+                        closeModal();
+                        await initDashboard();
+                    } catch (_) { /* logged inside apiFetch */ }
+                });
+
+                // ── Bootstrap ─────────────────────────────────────────────────
+                async function initDashboard() {
+                    try {
+                        const [bills, analytics] = await Promise.all([
+                            apiFetch('/api/bills'),
+                            apiFetch('/api/analytics'),
+                        ]);
+                        renderBills(bills);
+                        renderStats(analytics);
+                        renderBudgets(analytics.budget_variance);
+                    } catch (_) { /* logged inside apiFetch */ }
+                }
+
+                // Kick off on page load
+                initDashboard();
+            })();
+    </script>
+</body>
+
+</html>
