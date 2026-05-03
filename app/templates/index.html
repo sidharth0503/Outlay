@@ -467,73 +467,85 @@
 
     <!-- ===== Dashboard Script ===== -->
     <script>
-            (function () {
-                'use strict';
+        window.onload = async function () {
+            'use strict';
+            console.log('[Outlay] window.onload fired – bootstrapping dashboard…');
 
-                // ── DOM references ────────────────────────────────────────────
-                const $totalSpend = document.getElementById('stat-total-spend');
-                const $unpaid = document.getElementById('stat-unpaid');
-                const $activeBills = document.getElementById('stat-active-bills');
-                const $pendingCount = document.getElementById('stat-pending-count');
-                const $billsBox = document.getElementById('bills-container');
-                const $budgetsBox = document.getElementById('budgets-container');
-                const $modal = document.getElementById('expense-modal');
-                const $form = document.getElementById('expense-form');
-                const $btnOpen = document.getElementById('btn-add-expense');
-                const $btnClose = document.getElementById('modal-close');
-                const $backdrop = document.getElementById('modal-backdrop');
+            // ── DOM references ────────────────────────────────────────────
+            const $totalSpend = document.getElementById('stat-total-spend');
+            const $unpaid = document.getElementById('stat-unpaid');
+            const $activeBills = document.getElementById('stat-active-bills');
+            const $pendingCount = document.getElementById('stat-pending-count');
+            const $billsBox = document.getElementById('bills-container');
+            const $budgetsBox = document.getElementById('budgets-container');
+            const $modal = document.getElementById('expense-modal');
+            const $form = document.getElementById('expense-form');
+            const $btnOpen = document.getElementById('btn-add-expense');
+            const $btnClose = document.getElementById('modal-close');
+            const $backdrop = document.getElementById('modal-backdrop');
 
-                // ── Helpers ───────────────────────────────────────────────────
-                const fmt = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            console.log('[Outlay] DOM refs:', {
+                $totalSpend, $unpaid, $activeBills, $pendingCount,
+                $billsBox, $budgetsBox, $modal, $form, $btnOpen, $btnClose, $backdrop,
+            });
 
-                const formatDate = (iso) => {
-                    const d = new Date(iso + 'T00:00:00');
-                    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                };
+            // ── Helpers ───────────────────────────────────────────────────
+            const fmt = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                // ── Modal controls ────────────────────────────────────────────
-                function openModal() { $modal.classList.remove('hidden'); $modal.classList.add('flex'); }
-                function closeModal() { $modal.classList.add('hidden'); $modal.classList.remove('flex'); $form.reset(); }
+            const formatDate = (iso) => {
+                const d = new Date(iso + 'T00:00:00');
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            };
 
-                $btnOpen.addEventListener('click', openModal);
-                $btnClose.addEventListener('click', closeModal);
-                $backdrop.addEventListener('click', closeModal);
+            // ── Modal controls ────────────────────────────────────────────
+            function openModal() { $modal.classList.remove('hidden'); $modal.classList.add('flex'); }
+            function closeModal() { $modal.classList.add('hidden'); $modal.classList.remove('flex'); $form.reset(); }
 
-                // ── API helpers ───────────────────────────────────────────────
-                async function apiFetch(url, opts) {
-                    try {
-                        const res = await fetch(url, opts);
-                        if (!res.ok) {
-                            const err = await res.json().catch(() => ({}));
-                            throw new Error(err.error || `HTTP ${res.status}`);
-                        }
-                        return await res.json();
-                    } catch (e) {
-                        console.error(`[Outlay] ${opts?.method || 'GET'} ${url} failed:`, e);
-                        throw e;
+            $btnOpen.addEventListener('click', openModal);
+            $btnClose.addEventListener('click', closeModal);
+            $backdrop.addEventListener('click', closeModal);
+
+            // ── API helpers ───────────────────────────────────────────────
+            async function apiFetch(url, opts) {
+                console.log(`[Outlay] fetching ${opts?.method || 'GET'} ${url}…`);
+                try {
+                    const res = await fetch(url, opts);
+                    console.log(`[Outlay] ${url} → HTTP ${res.status}`);
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({}));
+                        throw new Error(err.error || `HTTP ${res.status}`);
                     }
+                    const json = await res.json();
+                    console.log(`[Outlay] ${url} payload:`, json);
+                    return json;
+                } catch (e) {
+                    console.error(`[Outlay] ${opts?.method || 'GET'} ${url} FAILED:`, e);
+                    throw e;
                 }
+            }
 
-                // ── Render: Stats cards ───────────────────────────────────────
-                function renderStats(analytics) {
-                    $totalSpend.textContent = fmt(analytics.total_spend);
-                    $unpaid.textContent = fmt(analytics.unpaid_balance);
-                }
+            // ── Render: Stats cards ───────────────────────────────────────
+            function renderStats(analytics) {
+                console.log('[Outlay] renderStats called with:', analytics);
+                $totalSpend.textContent = fmt(analytics.total_spend);
+                $unpaid.textContent = fmt(analytics.unpaid_balance);
+            }
 
-                // ── Render: Bills list ────────────────────────────────────────
-                function renderBills(bills) {
-                    $activeBills.textContent = bills.length;
-                    const pendingN = bills.filter(b => b.status === 'pending').length;
-                    $pendingCount.textContent = `${pendingN} pending`;
+            // ── Render: Bills list ────────────────────────────────────────
+            function renderBills(bills) {
+                console.log('[Outlay] renderBills called with', bills.length, 'bills:', bills);
+                $activeBills.textContent = bills.length;
+                const pendingN = bills.filter(b => b.status === 'pending').length;
+                $pendingCount.textContent = `${pendingN} pending`;
 
-                    $billsBox.innerHTML = '';
-                    bills.forEach((bill, i) => {
-                        const isLast = i === bills.length - 1;
-                        const row = document.createElement('div');
-                        row.className = `flex justify-between items-center py-2${isLast ? '' : ' border-b border-white/5'}`;
+                $billsBox.innerHTML = '';
+                bills.forEach((bill, i) => {
+                    const isLast = i === bills.length - 1;
+                    const row = document.createElement('div');
+                    row.className = `flex justify-between items-center py-2${isLast ? '' : ' border-b border-white/5'}`;
 
-                        if (bill.status === 'paid') {
-                            row.innerHTML = `
+                    if (bill.status === 'paid') {
+                        row.innerHTML = `
                         <div class="flex flex-col">
                             <span class="text-white font-label-md">${bill.name}</span>
                             <span class="text-white/50 font-label-sm">${formatDate(bill.dueDate)}</span>
@@ -542,8 +554,8 @@
                             <span class="text-white font-headline-md text-[18px]">${fmt(bill.amount)}</span>
                             <span class="px-2 py-1 rounded-full bg-primary-container/20 text-primary-fixed border border-primary-container/50 font-label-sm text-[10px]">Paid</span>
                         </div>`;
-                        } else {
-                            row.innerHTML = `
+                    } else {
+                        row.innerHTML = `
                         <div class="flex flex-col">
                             <span class="text-white font-label-md">${bill.name}</span>
                             <span class="text-white/50 font-label-sm">${formatDate(bill.dueDate)}</span>
@@ -552,26 +564,28 @@
                             <span class="text-white font-headline-md text-[18px]">${fmt(bill.amount)}</span>
                             <button data-bill-id="${bill.id}" class="btn-pay px-3 py-1 rounded-full border border-white/20 text-white hover:bg-white/10 font-label-sm transition-colors">Mark Paid</button>
                         </div>`;
-                        }
-                        $billsBox.appendChild(row);
-                    });
+                    }
+                    $billsBox.appendChild(row);
+                });
 
-                    // Attach pay handlers
-                    $billsBox.querySelectorAll('.btn-pay').forEach(btn => {
-                        btn.addEventListener('click', () => markPaid(btn.dataset.billId));
-                    });
-                }
+                // Attach pay handlers
+                $billsBox.querySelectorAll('.btn-pay').forEach(btn => {
+                    btn.addEventListener('click', () => markPaid(btn.dataset.billId));
+                });
+                console.log('[Outlay] renderBills complete – rows inserted:', $billsBox.children.length);
+            }
 
-                // ── Render: Budgets ───────────────────────────────────────────
-                function renderBudgets(variance) {
-                    $budgetsBox.innerHTML = '';
-                    for (const [cat, data] of Object.entries(variance)) {
-                        const pct = data.limit > 0 ? Math.min((data.current_spend / data.limit) * 100, 100) : 0;
-                        const isOver = data.remaining_budget <= 0;
-                        const barColor = isOver ? 'bg-error' : 'bg-gradient-to-r from-primary to-emerald-400';
-                        const block = document.createElement('div');
-                        block.className = 'flex flex-col gap-xs';
-                        block.innerHTML = `
+            // ── Render: Budgets ───────────────────────────────────────────
+            function renderBudgets(variance) {
+                console.log('[Outlay] renderBudgets called with:', variance);
+                $budgetsBox.innerHTML = '';
+                for (const [cat, data] of Object.entries(variance)) {
+                    const pct = data.limit > 0 ? Math.min((data.current_spend / data.limit) * 100, 100) : 0;
+                    const isOver = data.remaining_budget <= 0;
+                    const barColor = isOver ? 'bg-error' : 'bg-gradient-to-r from-primary to-emerald-400';
+                    const block = document.createElement('div');
+                    block.className = 'flex flex-col gap-xs';
+                    block.innerHTML = `
                     <div class="flex justify-between text-label-md text-white/80">
                         <span>${cat}</span>
                         <span>${fmt(data.current_spend)} / ${fmt(data.limit)}</span>
@@ -581,54 +595,67 @@
                             ${isOver ? '' : '<div class="absolute right-0 top-0 bottom-0 w-4 bg-white/50 blur-[2px]"></div>'}
                         </div>
                     </div>`;
-                        $budgetsBox.appendChild(block);
-                    }
+                    $budgetsBox.appendChild(block);
                 }
+                console.log('[Outlay] renderBudgets complete – categories rendered:', Object.keys(variance).length);
+            }
 
-                // ── Action: Mark Paid ─────────────────────────────────────────
-                async function markPaid(billId) {
-                    try {
-                        await apiFetch(`/api/bills/${billId}/pay`, { method: 'PATCH' });
-                        await initDashboard();
-                    } catch (_) { /* logged inside apiFetch */ }
+            // ── Action: Mark Paid ─────────────────────────────────────────
+            async function markPaid(billId) {
+                console.log('[Outlay] markPaid called for bill', billId);
+                try {
+                    await apiFetch(`/api/bills/${billId}/pay`, { method: 'PATCH' });
+                    await initDashboard();
+                } catch (e) {
+                    console.error('[Outlay] markPaid error:', e);
                 }
+            }
 
-                // ── Action: Add Expense ───────────────────────────────────────
-                $form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const payload = {
-                        name: document.getElementById('exp-name').value.trim(),
-                        amount: parseFloat(document.getElementById('exp-amount').value),
-                        dueDate: document.getElementById('exp-date').value,
-                        category: document.getElementById('exp-category').value,
-                    };
-                    try {
-                        await apiFetch('/api/bills', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload),
-                        });
-                        closeModal();
-                        await initDashboard();
-                    } catch (_) { /* logged inside apiFetch */ }
-                });
-
-                // ── Bootstrap ─────────────────────────────────────────────────
-                async function initDashboard() {
-                    try {
-                        const [bills, analytics] = await Promise.all([
-                            apiFetch('/api/bills'),
-                            apiFetch('/api/analytics'),
-                        ]);
-                        renderBills(bills);
-                        renderStats(analytics);
-                        renderBudgets(analytics.budget_variance);
-                    } catch (_) { /* logged inside apiFetch */ }
+            // ── Action: Add Expense ───────────────────────────────────────
+            $form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const payload = {
+                    name: document.getElementById('exp-name').value.trim(),
+                    amount: parseFloat(document.getElementById('exp-amount').value),
+                    dueDate: document.getElementById('exp-date').value,
+                    category: document.getElementById('exp-category').value,
+                };
+                console.log('[Outlay] submitting new expense:', payload);
+                try {
+                    await apiFetch('/api/bills', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                    });
+                    closeModal();
+                    await initDashboard();
+                } catch (e) {
+                    console.error('[Outlay] add-expense error:', e);
                 }
+            });
 
-                // Kick off on page load
-                initDashboard();
-            })();
+            // ── Bootstrap ─────────────────────────────────────────────────
+            async function initDashboard() {
+                console.log('[Outlay] initDashboard – fetching all data…');
+                try {
+                    const [bills, analytics] = await Promise.all([
+                        apiFetch('/api/bills'),
+                        apiFetch('/api/analytics'),
+                    ]);
+                    console.log('[Outlay] data received – bills:', bills, 'analytics:', analytics);
+                    renderBills(bills);
+                    renderStats(analytics);
+                    renderBudgets(analytics.budget_variance);
+                    console.log('[Outlay] ✅ dashboard render complete');
+                } catch (e) {
+                    console.error('[Outlay] ❌ initDashboard FAILED:', e);
+                }
+            }
+
+            // Kick off
+            await initDashboard();
+            console.log('[Outlay] window.onload handler finished');
+        };
     </script>
 </body>
 
