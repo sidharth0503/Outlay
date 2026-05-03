@@ -27,5 +27,4 @@ jobs:
 
       - name: Packer Build (Infrastructure as Code)
         run: |
-          packer init packer.pkr.hcl
           packer build packer.pkr.hcl
